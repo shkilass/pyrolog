@@ -6,4 +6,4 @@ __all__ = ['__version__', '__version_info__']
 VersionInfo = namedtuple('VersionInfo', ['major', 'minor', 'patch', 'release_level', 'commit'])
 
 __version__ = (2, 0, 0)
-__version_info__ = VersionInfo(*__version__, 'beta', 'ddb1b5e')
+__version_info__ = VersionInfo(*__version__, 'beta', '319e28f')
