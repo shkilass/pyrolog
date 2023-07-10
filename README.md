@@ -21,7 +21,7 @@
 
 **Work In Progress**. Currently available version `pyrolog v2.0.0-beta`.
 
-You can install\update it with:
+You can install\update by using these commands:
 
 ```shell
 $ git clone https://github.com/ftdot/pyrolog
@@ -34,15 +34,15 @@ $ pip install -U .
 > Beta version doesn't guarantee correct work.
 > You can report any issue [there](https://github.com/ftdot/pyrolog/issues).
 
-If you want to contribute, just fork, commit you changes and create PR [there](https://github.com/ftdot/pyrolog/pulls).
-While contributing, don't forget to comment your changes!
+If you want to contribute: just fork, commit you changes and create PR [there](https://github.com/ftdot/pyrolog/pulls).
+Don't forget to comment your changes while contributing!
 
 ### 📃 License
 
 By copying, distributing and modification this library, you agree with
 [GNU LGPL 2.1 Terms](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).
-License is applies to all source files of library.
-This is python files, reStructured files, etc.
+License is applies to all source files of the library.
+Is the python files, reStructured files, etc.
 License also provides NO WARRANTY for this library!
 
 ```
