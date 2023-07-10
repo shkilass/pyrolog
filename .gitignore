@@ -1,0 +1,20 @@
+
+# python cache
+pyrolog/__pycache__/
+examples/__pycache__/
+
+# docs builded files
+# docs/build/*
+# !docs/build/.gitkeep
+
+# pypi build
+dist/
+
+# other
+pyrolog.egg-info/
+.idea/
+example.log
+
+# temporary exclusions
+.readthedocs.yaml
+docs/
