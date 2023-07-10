@@ -1,7 +1,7 @@
 
-<img align="left" width="200px" src="https://github.com/ftdot/pyrolog/blob/master/banner.png?raw=true" />
-<h1><strong>🔥 Pyrolog</strong> <i>**WIP**</i></h1>
-<p>Pretty logging - Pretty project</p>
+<img align="left" width="340px" src="https://github.com/ftdot/pyrolog/blob/master/banner.png?raw=true" />
+<h1><strong>🔥 Pyrolog</strong> <i>WIP</i></h1>
+<p>Pretty logging — Pretty project</p>
 
 ---
 
