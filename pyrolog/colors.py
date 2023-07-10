@@ -3,7 +3,7 @@ import sys
 
 from colorama import Fore, Back, Style, init, just_fix_windows_console
 
-if sys.platform == 'win32' and '--pyrolog-windows-fix' in sys.argv:
+if sys.platform == 'win32' and '--pyrolog-disable-windows-fix' not in sys.argv:
     init()
     just_fix_windows_console()
 
