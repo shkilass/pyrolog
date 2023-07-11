@@ -65,7 +65,7 @@ class IOHandler(Handler):
               time: datetime.datetime | None = None,
               fmt_args: list[Any] | None = None,
               fmt_kwargs: dict[str, Any] | None = None):
-        if not enabled:
+        if not self.enabled:
             return
 
         if self.logging_context.log_level(self.log_level, level):

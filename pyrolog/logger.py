@@ -79,7 +79,7 @@ class Logger:
         :type kwargs: dict[str, Any]
         """
 
-        if not enabled:
+        if not self.enabled:
             return
 
         for h in self.handlers:
