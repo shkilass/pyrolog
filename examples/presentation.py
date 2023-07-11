@@ -60,7 +60,7 @@ another_logger = pyrolog.Logger(
 
 # example of using of the color bindings
 another_logger.info('This is {style.bold}another {fore.red}PYROLOG{fore.reset} logger{reset}')
-another_logger.info('And it has {bg.yellow}another{bg.reset} {} with {} parameter enabled', 'ColoredFormatter()', 'use_repr')
+another_logger.info('And it has {fore.black}{bg.yellow}another{bg.reset}{fore.reset} {} with {} parameter enabled', 'ColoredFormatter()', 'use_repr')
 
 # example with the dict
 another_logger.debug('Example with the dict: {}',
