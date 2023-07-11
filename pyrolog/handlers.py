@@ -22,11 +22,19 @@ class Handler:
                  formatter: Formatter = PlainFormatter(),
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT,
                  log_exceptions: bool = True,
+                 enabled: bool = True,
                  ):
         self.log_level        = log_level
         self.formatter        = formatter
         self.logging_context  = logging_context
         self.log_exceptions   = log_exceptions
+        self.enabled          = enabled
+
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
 
     @abstractmethod
     def write(self,
@@ -57,6 +65,9 @@ class IOHandler(Handler):
               time: datetime.datetime | None = None,
               fmt_args: list[Any] | None = None,
               fmt_kwargs: dict[str, Any] | None = None):
+        if not enabled:
+            return
+
         if self.logging_context.log_level(self.log_level, level):
 
             # log formatted message

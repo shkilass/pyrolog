@@ -16,6 +16,14 @@ class LoggingContext:
 
         self.loggers: list['Logger'] = []
 
+    def enable_all_loggers(self):
+        for l in self.loggers:
+            l.enable()
+
+    def disable_all_loggers(self):
+        for l in self.loggers:
+            l.disable()
+
     def get_level_offset(self):
         return len(max(self.log_levels, key=len))
 

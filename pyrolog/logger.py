@@ -28,6 +28,7 @@ class Logger:
                  handlers: Handler | list[Handler] | None = None,
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT,
                  logger_color: TextColor | BGColor | TextStyle | str = '',
+                 enabled: bool = True,
                  ):
         """Creates a new Logger object.
 
@@ -37,15 +38,26 @@ class Logger:
         :type handlers: Handler | list[Handler] | None
         :param logging_context: The current logging context (by default is defaults.DEFAULT_LOGGING_CONTEXT)
         :type logging_context: LoggingContext
+        :param enabled: If it is set to False, logger will not log any messages
+        :type enabled: bool
         """
 
         self.name             = name
         self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
         self.logging_context  = logging_context
         self.logger_color     = logger_color
+        self.enabled          = enabled
 
         logging_context.loggers.append(self)
         update_logger_name_offset(logging_context)
+
+    def enable(self):
+        """Enables a logger"""
+        self.enabled = True
+
+    def disable(self):
+        """Disables a logger"""
+        self.enabled = False
 
     def record(self,
                message: str,
@@ -66,6 +78,9 @@ class Logger:
         :param kwargs: Named arguments for formatting
         :type kwargs: dict[str, Any]
         """
+
+        if not enabled:
+            return
 
         for h in self.handlers:
             h.write(
