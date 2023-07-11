@@ -84,8 +84,25 @@ plain_logger.info('There is plain logger, without coloring, but with offsets')
 # try to use colors as with main_logger
 try:
     plain_logger.debug('Try to use {fore.red}colors{fore.reset}')
-except Exception as e:
-    plain_logger.exception('Cannot to use colors, exception has occurred', exc=e)
+except Exception:
+    plain_logger.exception('Cannot to use colors, exception has occurred')
+
+# disable plain logger
+plain_logger.disable()
+
+# these log messages will not be logged because, logger is disabled
+
+plain_logger.debug('am I disabled?..')
+plain_logger.critical('Do not disable me!!')
+
+# disable handler of the another logger
+another_logger.handlers[0].disable()
+
+# these log messages will not be logged, because handler of this logger is disabled
+
+another_logger.info('Hello, PlainLogger, I got disabled too')
+plain_logger.error('But, you enabled... wtf?')
+another_logger.debug('My handler is disabled')
 
 ####
 
