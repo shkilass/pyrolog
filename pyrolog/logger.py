@@ -75,8 +75,8 @@ class Logger:
                 self.name,
                 exc=exc,
                 time=datetime.now(),
-                *args,
-                **kwargs
+                fmt_args=args,
+                fmt_kwargs=kwargs,
             )
 
     @staticmethod

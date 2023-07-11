@@ -34,10 +34,10 @@ class Handler:
               level: str | int,
               logger_color: str,
               logger_name: str,
-              *args: Any,
               exc: Exception | None = None,
               time: datetime.datetime | None = None,
-              **kwargs: dict[str, Any]):
+              fmt_args: list[Any] | None = None,
+              fmt_kwargs: dict[str, Any] | None = None):
         raise NotImplementedError('Method "write()" isn\'t implemented!')
 
 
@@ -53,14 +53,14 @@ class IOHandler(Handler):
               level: str | int,
               logger_color: str,
               logger_name: str,
-              *args: Any,
               exc: Exception | None = None,
               time: datetime.datetime | None = None,
-              **kwargs: dict[str, Any]):
+              fmt_args: list[Any] | None = None,
+              fmt_kwargs: dict[str, Any] | None = None):
         if self.logging_context.log_level(self.log_level, level):
 
             # log formatted message
-            self.io.write(self.formatter.format(message, time, level, logger_color, logger_name, *args, **kwargs)+'\n')
+            self.io.write(self.formatter.format(message, time, level, logger_color, logger_name, fmt_args, fmt_kwargs)+'\n')
 
             # format and write exception to io if exceptions logging is enabled and exception was given
             if self.log_exceptions and exc is not None:

@@ -65,8 +65,8 @@ class Formatter:
                level: str,
                logger_color: str,
                logger_name: str,
-               *args: Any,
-               **kwargs: dict[str, Any]
+               fmt_args: list[Any],
+               fmt_kwargs: dict[str, Any]
                ):
         raise NotImplementedError('Method "format()" isn\'t implemented')
 
@@ -89,10 +89,19 @@ class PlainFormatter(Formatter):
         self.static_variables['level_offset']        = self.logging_context.get_level_offset() if offsets else 0
         self.static_variables['logger_name_offset']  = self.logging_context.get_logger_name_offset() if offsets else 0
 
-    def format_message(self, message: str, *args: Any, **kwargs: dict[str, Any]):
+    def format_message(self,
+                       message: str,
+                       level: str,
+                       logger_color: str,
+                       logger_name: str,
+                       fmt_args: list[Any],
+                       fmt_kwargs: dict[str, Any]):
         return message.format(
-            *args,
-            **kwargs,
+            level=level,
+            logger_color=logger_color,
+            logger_name=logger_name,
+            *fmt_args,
+            **fmt_kwargs,
             **self.static_variables,
         )
 
@@ -102,17 +111,24 @@ class PlainFormatter(Formatter):
                level: str,
                logger_color: str,
                logger_name: str,
-               *args: Any,
-               **kwargs: dict[str, Any]
+               fmt_args: list[Any],
+               fmt_kwargs: dict[str, Any]
                ):
         return self.format_string.format(
-            message=self.format_message(message, level=level, logger_color=logger_color, logger_name=logger_name, *args, **kwargs),
+            message=self.format_message(
+                message,
+                level,
+                logger_color,
+                logger_name,
+                fmt_args,
+                fmt_kwargs
+            ),
             time=self.format_time(time) if self.time_formatting else '*',
             level=level,
             logger_color=logger_color,
             logger_name=logger_name,
-            *args,
-            **kwargs,
+            *fmt_args,
+            **fmt_kwargs,
             **self.static_variables,
         )
 
@@ -153,13 +169,6 @@ class ColoredFormatter(PlainFormatter):
         self.static_variables['reset']         = TextStyle.reset
 
         self._func = repr if use_repr else str
-
-    def format_message(self, message: str, *args: Any, **kwargs: dict[str, Any]):
-        return message.format(
-            *args,
-            **kwargs,
-            **self.static_variables,
-        )
 
     def get_level_color(self, level: str):
         if level in self.color_dict['levels']:
@@ -206,21 +215,47 @@ class ColoredFormatter(PlainFormatter):
 
         return self.get_value_color(type(value)) + self._func(value) + TextStyle.reset
 
+    def format_message(self,
+                       message: str,
+                       level: str,
+                       level_color: str,
+                       logger_color: str,
+                       logger_name: str,
+                       fmt_args: list[Any],
+                       fmt_kwargs: dict[str, Any]):
+        return message.format(
+            level=level,
+            level_color=level_color,
+            logger_color=logger_color,
+            logger_name=logger_name,
+            *fmt_args,
+            **fmt_kwargs,
+            **self.static_variables,
+        )
+
     def format(self,
                message: str,
                time: datetime.datetime | None,
                level: str,
                logger_color: str,
                logger_name: str,
-               *args: Any,
-               **kwargs: dict[str, Any]
+               fmt_args: list[Any],
+               fmt_kwargs: dict[str, Any]
                ):
-        colored_args    = [self.format_value(a) for a in args]
-        colored_kwargs  = {k: self.format_value(v) for k, v in kwargs.items()}
+        colored_args    = [self.format_value(a) for a in fmt_args]
+        colored_kwargs  = {k: self.format_value(v) for k, v in fmt_kwargs.items()}
         level_color     = self.get_level_color(level)
 
         return self.format_string.format(
-            message=self.format_message(message, level=level, level_color=level_color, logger_color=logger_color, logger_name=logger_name, *colored_args, **colored_kwargs),
+            message=self.format_message(
+                message,
+                level,
+                level_color,
+                logger_color,
+                logger_name,
+                colored_args,
+                colored_kwargs
+            ),
             time=self.format_time(time) if self.time_formatting else '*',
             level=level,
             level_color=level_color,
@@ -248,7 +283,5 @@ class ColoredFormatter(PlainFormatter):
             microsecond=time.microsecond,  # str(time.microsecond)[:4]
             **self.static_variables,
         )
-
-# TODO: Colored formatter
 
 defined_formatters: list[Formatter] = []
