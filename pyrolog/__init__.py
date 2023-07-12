@@ -10,6 +10,7 @@ from . import utils
 
 from ._types import LogOnlyLevels
 
+from .group import *
 from .logger import *
 from .logging_context import *
 from .handlers import *

@@ -42,6 +42,8 @@ class Handler:
               level: str | int,
               logger_color: str,
               logger_name: str,
+              group_name: str,
+              group_color: str,
               exc: Exception | None = None,
               time: datetime.datetime | None = None,
               fmt_args: list[Any] | None = None,
@@ -61,6 +63,8 @@ class IOHandler(Handler):
               level: str | int,
               logger_color: str,
               logger_name: str,
+              group_name: str,
+              group_color: str,
               exc: Exception | None = None,
               time: datetime.datetime | None = None,
               fmt_args: list[Any] | None = None,
@@ -71,7 +75,15 @@ class IOHandler(Handler):
         if self.logging_context.log_level(self.log_level, level):
 
             # log formatted message
-            self.io.write(self.formatter.format(message, time, level, logger_color, logger_name, fmt_args, fmt_kwargs)+'\n')
+            self.io.write(self.formatter.format(
+                message,
+                time,
+                level,
+                logger_color,
+                logger_name,
+                group_name,
+                group_color,
+                fmt_args, fmt_kwargs)+'\n')
 
             # format and write exception to io if exceptions logging is enabled and exception was given
             if self.log_exceptions and exc is not None:

@@ -21,7 +21,7 @@ TIMED_MINIMAL_FORMAT_STRING = '{time} {level:<{level_offset}} {message}'
 MINIMAL_TIME_FORMAT_STRING = '{hour:02d}:{minute:02d}:{second:02d}.{microsecond}'
 """The default minimal time format specification."""
 
-MAXIMUM_FORMAT_STRING = '{time} | {level:<{level_offset}} | {logger_name:<{logger_name_offset}} -> {message}'
+MAXIMUM_FORMAT_STRING = '{time} | {level:<{level_offset}} | {group_name:<{group_name_offset}} | {logger_name:<{logger_name_offset}} -> {message}'
 """Format specification that is recommended for professional, large projects."""
 
 DEFAULT_LOGGING_CONTEXT = LoggingContext(DEFAULT_LOG_LEVELS)
@@ -60,5 +60,5 @@ COLORED_TIMED_MINIMAL_FORMAT_STRING = '{time} {level_color}{level:<{level_offset
 COLORED_MINIMAL_TIME_FORMAT_STRING = '{fore.cyan}{hour:02d}{fore.reset}:{fore.cyan}{minute:02d}{fore.reset}:{fore.cyan}{second:02d}{fore.reset}.{fore.lightmagenta}{microsecond}{fore.reset}'
 """The default colored minimal time format specification."""
 
-COLORED_MAXIMUM_FORMAT_STRING = '{time} | {level_color}{level:<{level_offset}}{reset} | {logger_color}{logger_name:<{logger_name_offset}}{reset} -> {message}'
+COLORED_MAXIMUM_FORMAT_STRING = '{time} | {level_color}{level:<{level_offset}}{reset} | {group_name:<{group_name_offset}} | {logger_color}{logger_name:<{logger_name_offset}}{reset} -> {message}'
 """Colored format specification that is recommended for professional, large projects."""

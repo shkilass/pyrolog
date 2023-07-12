@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .logger import Logger
+    from .group import Group
 
 __all__ = ['LoggingContext']
 
@@ -15,6 +16,7 @@ class LoggingContext:
         self.log_levels = log_levels
 
         self.loggers: list['Logger'] = []
+        self.groups: list['Group'] = []
 
     def enable_all_loggers(self):
         for l in self.loggers:
@@ -28,7 +30,10 @@ class LoggingContext:
         return len(max(self.log_levels, key=len))
 
     def get_logger_name_offset(self):
-        return 0 if len(self.loggers) == 0 else len(max(self.loggers, key=lambda l: len(l.name)).name)
+        return 0 if len(self.loggers) == 0 else len(max(self.loggers, key=lambda g: len(g.name)).name)
+
+    def get_group_name_offset(self):
+        return 0 if len(self.groups) == 0 else len(max(self.groups, key=lambda g: len(g.name_path)).name_path)
 
     def log_level(self, level: LogLevel, context_level: str | int):
 

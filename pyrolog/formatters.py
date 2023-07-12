@@ -65,6 +65,8 @@ class Formatter:
                level: str,
                logger_color: str,
                logger_name: str,
+               group_name: str,
+               group_color: str,
                fmt_args: list[Any],
                fmt_kwargs: dict[str, Any]
                ):
@@ -88,18 +90,23 @@ class PlainFormatter(Formatter):
         self.offsets                                 = offsets
         self.static_variables['level_offset']        = self.logging_context.get_level_offset() if offsets else 0
         self.static_variables['logger_name_offset']  = self.logging_context.get_logger_name_offset() if offsets else 0
+        self.static_variables['group_name_offset']   = self.logging_context.get_group_name_offset() if offsets else 0
 
     def format_message(self,
                        message: str,
                        level: str,
                        logger_color: str,
                        logger_name: str,
+                       group_name: str,
+                       group_color: str,
                        fmt_args: list[Any],
                        fmt_kwargs: dict[str, Any]):
         return message.format(
             level=level,
             logger_color=logger_color,
             logger_name=logger_name,
+            group_name=group_name,
+            group_color=group_color,
             *fmt_args,
             **fmt_kwargs,
             **self.static_variables,
@@ -111,6 +118,8 @@ class PlainFormatter(Formatter):
                level: str,
                logger_color: str,
                logger_name: str,
+               group_name: str,
+               group_color: str,
                fmt_args: list[Any],
                fmt_kwargs: dict[str, Any]
                ):
@@ -120,6 +129,8 @@ class PlainFormatter(Formatter):
                 level,
                 logger_color,
                 logger_name,
+                group_name,
+                group_color,
                 fmt_args,
                 fmt_kwargs
             ),
@@ -127,6 +138,8 @@ class PlainFormatter(Formatter):
             level=level,
             logger_color=logger_color,
             logger_name=logger_name,
+            group_name=group_name,
+            group_color=group_color,
             *fmt_args,
             **fmt_kwargs,
             **self.static_variables,
@@ -221,6 +234,8 @@ class ColoredFormatter(PlainFormatter):
                        level_color: str,
                        logger_color: str,
                        logger_name: str,
+                       group_name: str,
+                       group_color: str,
                        fmt_args: list[Any],
                        fmt_kwargs: dict[str, Any]):
         return message.format(
@@ -228,6 +243,8 @@ class ColoredFormatter(PlainFormatter):
             level_color=level_color,
             logger_color=logger_color,
             logger_name=logger_name,
+            group_name=group_name,
+            group_color=group_color,
             *fmt_args,
             **fmt_kwargs,
             **self.static_variables,
@@ -239,6 +256,8 @@ class ColoredFormatter(PlainFormatter):
                level: str,
                logger_color: str,
                logger_name: str,
+               group_name: str,
+               group_color: str,
                fmt_args: list[Any],
                fmt_kwargs: dict[str, Any]
                ):
@@ -253,6 +272,8 @@ class ColoredFormatter(PlainFormatter):
                 level_color,
                 logger_color,
                 logger_name,
+                group_name,
+                group_color,
                 colored_args,
                 colored_kwargs
             ),
@@ -261,6 +282,8 @@ class ColoredFormatter(PlainFormatter):
             level_color=level_color,
             logger_color=logger_color,
             logger_name=logger_name,
+            group_name=group_name,
+            group_color=group_color,
             *colored_args,
             **colored_kwargs,
             **self.static_variables,

@@ -7,7 +7,10 @@ from .logging_context import LoggingContext
 from .defaults import DEFAULT_LOGGING_CONTEXT
 from .colors import TextColor, BGColor, TextStyle
 
-from typing import Any, Self
+from typing import TYPE_CHECKING, Any, Self
+
+if TYPE_CHECKING:
+    from .group import Group
 
 __all__ = ['Logger']
 
@@ -28,6 +31,7 @@ class Logger:
                  handlers: Handler | list[Handler] | None = None,
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT,
                  logger_color: TextColor | BGColor | TextStyle | str = '',
+                 group: 'Group' = None,
                  enabled: bool = True,
                  ):
         """Creates a new Logger object.
@@ -38,18 +42,35 @@ class Logger:
         :type handlers: Handler | list[Handler] | None
         :param logging_context: The current logging context (by default is defaults.DEFAULT_LOGGING_CONTEXT)
         :type logging_context: LoggingContext
+        :param group: Group of the logger. If it is not None, then copies all parameters from this group
         :param enabled: If it is set to False, logger will not log any messages
         :type enabled: bool
         """
 
-        self.name             = name
-        self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
-        self.logging_context  = logging_context
-        self.logger_color     = logger_color
-        self.enabled          = enabled
+        if group is not None:
+            self.handlers         = group.handlers
+            self.logging_context  = group.logging_context
+            self.enabled          = group.enabled
 
-        logging_context.loggers.append(self)
-        update_logger_name_offset(logging_context)
+            self.group_name_path = group.name_path
+            self.group_color = group.group_color
+
+            group.loggers.append(self)
+
+        else:
+            self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
+            self.logging_context  = logging_context
+            self.enabled          = enabled
+
+            self.group_name_path = '*'
+            self.group_color = ''
+
+        self.name          = name
+        self.logger_color  = logger_color
+        self.group         = group
+
+        self.logging_context.loggers.append(self)
+        update_logger_name_offset(self.logging_context)
 
     def enable(self):
         """Enables a logger"""
@@ -88,6 +109,8 @@ class Logger:
                 level,
                 self.logger_color,
                 self.name,
+                self.group_name_path,
+                self.group_color,
                 exc=exc,
                 time=datetime.now(),
                 fmt_args=args,

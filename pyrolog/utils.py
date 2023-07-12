@@ -37,3 +37,10 @@ def update_logger_name_offset(logging_context: LoggingContext = DEFAULT_LOGGING_
     for f in defined_formatters:
         if hasattr(f, 'offsets') and f.offsets and f.logging_context is logging_context:
             f.static_variables['logger_name_offset'] = logging_context.get_logger_name_offset()
+
+
+def update_group_name_offset(logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT):
+    for f in defined_formatters:
+        if hasattr(f, 'offsets') and f.offsets and f.logging_context is logging_context:
+            f.static_variables['group_name_offset'] = logging_context.get_group_name_offset()
+
