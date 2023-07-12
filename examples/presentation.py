@@ -2,6 +2,10 @@
 import pyrolog
 import math
 
+####
+
+# MAIN
+
 # declare stdout handler with log level - debug
 sout_handler = pyrolog.StdoutHandler(
     log_level='debug',
@@ -103,6 +107,59 @@ another_logger.handlers[0].disable()
 another_logger.info('Hello, PlainLogger, I got disabled too')
 plain_logger.error('But, you enabled... wtf?')
 another_logger.debug('My handler is disabled')
+
+####
+
+# GROUPS
+
+# creating sample group
+
+plugins_group = pyrolog.Group(
+    name='Plugins',
+    handlers=[sout_handler, ],
+    group_color=pyrolog.TextColor.red
+)
+
+# creating "plugin" loggers
+core_plugin_logger        = plugins_group.logger('CorePlugin')
+helloworld_plugin_logger  = plugins_group.logger('HelloWorldPlugin')
+
+core_plugin_logger.info('Plugin loaded!')
+helloworld_plugin_logger.info('Plugin loaded!')
+
+core_plugin_logger.info('Pyrolog version: {}', '.'.join([str(i) for i in pyrolog.__version__]))
+helloworld_plugin_logger.info('Hello, world!')
+
+# it saves offsets
+main_logger.info('It saves offsets')
+
+# subgroups
+
+core_plugin_subgroup = plugins_group.subgroup(
+    name='CorePlugin'
+)
+
+core_plugin_logger_auth = core_plugin_subgroup.logger('AuthSystem')
+
+core_plugin_logger_auth.info('New user authorized with the username {}', 'ftdot')
+
+# many subgroups
+
+many_subgroups = core_plugin_subgroup.subgroup(
+    name='Many'
+).subgroup(
+    name='Sub'
+).subgroup(
+    name='Groups'
+)
+
+idk_how_name_this = many_subgroups.logger('IDKLogger')
+idk_how_name_this.info(':)')
+
+# disable main group of many subgroups
+core_plugin_subgroup.disable()
+
+idk_how_name_this.info('This will not be logged')
 
 ####
 
