@@ -6,6 +6,7 @@ from abc import abstractmethod
 from collections import namedtuple
 from functools import lru_cache
 
+from . import empty_colors
 from .logging_context import LoggingContext
 from ._types import VarDict, ColorDict
 from .defaults import (DEFAULT_LOGGING_CONTEXT,
@@ -91,6 +92,10 @@ class PlainFormatter(Formatter):
         self.static_variables['level_offset']        = self.logging_context.get_level_offset() if offsets else 0
         self.static_variables['logger_name_offset']  = self.logging_context.get_logger_name_offset() if offsets else 0
         self.static_variables['group_name_offset']   = self.logging_context.get_group_name_offset() if offsets else 0
+        self.static_variables['fore'] = empty_colors.EmptyTextColor
+        self.static_variables['bg'] = empty_colors.EmptyBGColor
+        self.static_variables['style'] = empty_colors.EmptyTextStyle
+        self.static_variables['reset'] = ''
 
     def format_message(self,
                        message: str,
