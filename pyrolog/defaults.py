@@ -21,6 +21,12 @@ TIMED_MINIMAL_FORMAT_STRING = '{time} {level:<{level_offset}} {message}'
 MINIMAL_TIME_FORMAT_STRING = '{hour:02d}:{minute:02d}:{second:02d}.{microsecond}'
 """The default minimal time format specification."""
 
+MAXIMUM_TIME_FORMAT_STRING = '{year:04d}.{month:02d}.{day:02d} {hour:02d}:{minute:02d}:{second:02d}.{microsecond}'
+"""Time Format specification that is recommended for professional, large projects."""
+
+MAXIMUM_TIME_FORMAT_STRING_FILENAME_SAFE = '{year:04d}_{month:02d}_{day:02d}-{hour:02d}_{minute:02d}_{second:02d}_{microsecond}'
+"""Time Format specification that is recommended for filename of the log files."""
+
 MAXIMUM_FORMAT_STRING = '{time} | {level:<{level_offset}} | {group_name:<{group_name_offset}} | {logger_name:<{logger_name_offset}} -> {message}'
 """Format specification that is recommended for professional, large projects."""
 
@@ -59,6 +65,9 @@ COLORED_TIMED_MINIMAL_FORMAT_STRING = '{time} {level_color}{level:<{level_offset
 
 COLORED_MINIMAL_TIME_FORMAT_STRING = '{fore.cyan}{hour:02d}{fore.reset}:{fore.cyan}{minute:02d}{fore.reset}:{fore.cyan}{second:02d}{fore.reset}.{fore.lightmagenta}{microsecond}{fore.reset}'
 """The default colored minimal time format specification."""
+
+COLORED_MAXIMUM_TIME_FORMAT_STRING = '{fore.cyan}{year:04d}{fore.reset}.{fore.cyan}{month:02d}{fore.reset}.{fore.cyan}{day:02d}{fore.reset} {fore.cyan}{hour:02d}{fore.reset}:{fore.cyan}{minute:02d}{fore.reset}:{fore.cyan}{second:02d}{fore.reset}.{fore.lightmagenta}{microsecond}{fore.reset}'
+"""Colored time format specification that is recommended for professional, large projects."""
 
 COLORED_MAXIMUM_FORMAT_STRING = '{time} | {level_color}{level:<{level_offset}}{reset} | {group_name:<{group_name_offset}} | {logger_color}{logger_name:<{logger_name_offset}}{reset} -> {message}'
 """Colored format specification that is recommended for professional, large projects."""
