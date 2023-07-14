@@ -14,8 +14,17 @@ sout_handler = pyrolog.StdoutHandler(
     )
 )
 
-# initialize main logger
-main_logger = pyrolog.Logger('MainLogger', handlers=[sout_handler, ])
+# declare file handler with log_level - debug
+file_handler = pyrolog.FileHandler(
+    'presentation.log',
+    log_level='debug',
+    formatter=pyrolog.PlainFormatter(
+        format_string=pyrolog.defaults.MAXIMUM_FORMAT_STRING
+    )
+)
+
+# initialize main logger with stdout (console) handler and file handler
+main_logger = pyrolog.Logger('MainLogger', handlers=[sout_handler, file_handler])
 
 # examples of the default log levels
 main_logger.debug('This is {} message', 'debug')
@@ -86,10 +95,7 @@ plain_logger = pyrolog.Logger('PlainLogger', handlers=[plain_sout_handler, ])
 plain_logger.info('There is plain logger, without coloring, but with offsets')
 
 # try to use colors as with main_logger
-try:
-    plain_logger.debug('Try to use {fore.red}colors{fore.reset}')
-except Exception:
-    plain_logger.exception('Cannot to use colors, exception has occurred')
+plain_logger.debug('Try to use {fore.red}colors{fore.reset}')
 
 # disable plain logger
 plain_logger.disable()
