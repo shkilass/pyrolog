@@ -44,17 +44,3 @@ def update_group_name_offset(logging_context: LoggingContext = DEFAULT_LOGGING_C
         if hasattr(f, 'offsets') and f.offsets and f.logging_context is logging_context:
             f.static_variables['group_name_offset'] = logging_context.get_group_name_offset()
 
-
-####
-
-
-class Uncolored:
-
-    def __init__(self, value: Any):
-        self.value = value
-
-    def __str__(self):
-        return str(self.value)
-
-    def __repr__(self):
-        return repr(self.value)

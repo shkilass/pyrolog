@@ -16,13 +16,28 @@ from .defaults import (DEFAULT_LOGGING_CONTEXT,
                        COLORED_MINIMAL_TIME_FORMAT_STRING,
                        DEFAULT_COLOR_DICT)
 from .colors import TextColor, BGColor, TextStyle
-from .utils import Uncolored
 
 from typing import Any
 
-__all__ = ['fmt', 'Formatter', 'PlainFormatter', 'ColoredFormatter']
+__all__ = ['fmt', 'Uncolored', 'Formatter', 'PlainFormatter', 'ColoredFormatter']
 
 fmt = namedtuple('FormatTuple', ('format_string', 'string'))
+
+####
+
+
+class Uncolored:
+
+    def __init__(self, value: Any):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
+
+    def __repr__(self):
+        return repr(self.value)
+
+####
 
 
 class Formatter:
