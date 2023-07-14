@@ -106,8 +106,13 @@ class StderrHandler(IOHandler):
 
 class FileHandler(IOHandler):
 
-    def __init__(self, path: str | bytes | PathLike[str] | PathLike[bytes] | int, *args: Any, **kwargs: dict[str, Any]):
-        self.file_io  = open(path, 'w')
+    def __init__(self,
+                 path: str | bytes | PathLike[str] | PathLike[bytes] | int,
+                 encoding: str = 'utf8',
+                 *args: Any,
+                 **kwargs: dict[str, Any]
+                 ):
+        self.file_io  = open(path, 'w', encoding=encoding)
         self.path     = path
 
         super().__init__(self.file_io, *args, **kwargs)
