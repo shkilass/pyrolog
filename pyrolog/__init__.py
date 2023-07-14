@@ -18,6 +18,7 @@ from .handlers import *
 from .formatters import *
 from .version import *
 from .colors import *
+from .utils import Uncolored
 
 
 def get_plain_logger(log_level: types.LogLevel = 'info'):
