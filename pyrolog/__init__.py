@@ -7,6 +7,7 @@
 from . import defaults
 from . import _types as types
 from . import utils
+from . import empty_colors
 
 from ._types import LogOnlyLevels
 
