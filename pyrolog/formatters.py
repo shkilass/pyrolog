@@ -16,6 +16,7 @@ from .defaults import (DEFAULT_LOGGING_CONTEXT,
                        COLORED_MINIMAL_TIME_FORMAT_STRING,
                        DEFAULT_COLOR_DICT)
 from .colors import TextColor, BGColor, TextStyle
+from .utils import Uncolored
 
 from typing import Any
 
@@ -230,6 +231,9 @@ class ColoredFormatter(PlainFormatter):
             output += f'{dict_color}, '.join(temp) + f'{dict_color}}}{TextStyle.reset}'
 
             return output
+
+        elif isinstance(value, Uncolored):
+            return self._func(value) + TextStyle.reset
 
         return self.get_value_color(type(value)) + self._func(value) + TextStyle.reset
 
