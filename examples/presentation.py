@@ -55,6 +55,11 @@ except Exception as e:
 
 main_logger.info('It is continue work')
 
+# uncolored type
+main_logger.info('Uncolored int: {} str: {}',
+                 pyrolog.Uncolored(math.pi),
+                 pyrolog.Uncolored('some string'))
+
 # example with "use_repr"
 another_sout_handler = pyrolog.StdoutHandler(
     log_level='debug',
