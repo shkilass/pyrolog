@@ -1,3 +1,20 @@
+"""Dedicated module for the :class:`Logger` class.
+
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.Logger
+
+    As example.
+"""
 
 from datetime import datetime
 
@@ -5,9 +22,11 @@ from .handlers import Handler
 from .utils import make_logger_binding, update_logger_name_offset
 from .logging_context import LoggingContext
 from .defaults import DEFAULT_LOGGING_CONTEXT
-from .colors import TextColor, BGColor, TextStyle
 
-from typing import Any, Self
+from typing import TYPE_CHECKING, Any, Self
+
+if TYPE_CHECKING:
+    from .group import Group
 
 __all__ = ['Logger']
 
@@ -15,11 +34,11 @@ __all__ = ['Logger']
 class Logger:
     """A logger object.
 
-    :ivar name: Name of the logger
+    :ivar name: Name of the logger.
     :type name: str
-    :ivar handlers: Handlers to be used by logger
-    :type handlers: Handler | list[Handler] | None
-    :ivar logging_context: The current logging context (by default is defaults.DEFAULT_LOGGING_CONTEXT)
+    :ivar handlers: Handlers to be used by logger.
+    :type handlers: list[Handler]
+    :ivar logging_context: The current logging context. (by default is defaults.DEFAULT_LOGGING_CONTEXT)
     :type logging_context: LoggingContext
     """
 
@@ -27,25 +46,64 @@ class Logger:
                  name: str = '',
                  handlers: Handler | list[Handler] | None = None,
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT,
-                 logger_color: TextColor | BGColor | TextStyle | str = '',
+                 logger_color: str = '',
+                 group: 'Group | str | None' = None,
+                 enabled: bool = True,
                  ):
         """Creates a new Logger object.
 
-        :param name: Name of the logger (by default it is empty)
+        :param name: Name of the logger. (by default it is empty)
         :type name: str | None
-        :param handlers: Handlers to be used by logger
+        :param handlers: Handlers to be used by logger.
         :type handlers: Handler | list[Handler] | None
-        :param logging_context: The current logging context (by default is defaults.DEFAULT_LOGGING_CONTEXT)
+        :param logging_context: The current logging context. (by default is defaults.DEFAULT_LOGGING_CONTEXT)
         :type logging_context: LoggingContext
+        :param logger_color: Color of the logger. (visible only by using ColoredFormatter)
+        :type logger_color: str
+        :param group: Group of the logger. If it is not None, then copies all parameters from that group.
+        :type group: Group | str | None
+        :param enabled: If it is set to False, logger will not log any messages.
+        :type enabled: bool
         """
 
-        self.name             = name
-        self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
-        self.logging_context  = logging_context
-        self.logger_color     = logger_color
+        if group is None:
+            self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
+            self.logging_context  = logging_context
+            self.enabled          = enabled
 
-        logging_context.loggers.append(self)
-        update_logger_name_offset(logging_context)
+            self.group_name_path  = '*'
+            self.group_color      = ''
+
+        else:
+            if isinstance(group, str):
+                if group not in logging_context.groups_by_name:
+                    raise NameError(f'Group "{group}" isn\'t defined in given logging context.')
+
+                group = logging_context.groups_by_name[group]
+
+            self.handlers         = group.handlers
+            self.logging_context  = group.logging_context
+            self.enabled          = group.enabled
+
+            self.group_name_path  = group.name_path
+            self.group_color      = group.group_color
+
+            group.loggers.append(self)
+
+        self.name          = name
+        self.logger_color  = logger_color
+        self.group         = group
+
+        self.logging_context.loggers.append(self)
+        update_logger_name_offset(self.logging_context)
+
+    def enable(self):
+        """Enables a logger."""
+        self.enabled = True
+
+    def disable(self):
+        """Disables a logger."""
+        self.enabled = False
 
     def record(self,
                message: str,
@@ -55,17 +113,20 @@ class Logger:
                **kwargs: dict[str, Any]):
         """Records a message at the specified logging level.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param level: Logged level
+        :param level: Logged level.
         :type level:
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
+
+        if not self.enabled:
+            return
 
         for h in self.handlers:
             h.write(
@@ -73,6 +134,8 @@ class Logger:
                 level,
                 self.logger_color,
                 self.name,
+                self.group_name_path,
+                self.group_color,
                 exc=exc,
                 time=datetime.now(),
                 fmt_args=args,
@@ -91,35 +154,35 @@ class Logger:
     # These methods are implemented by "_bind_log_methods()" method (when the Logger object initialized)
 
     def debug(self, message: str, *args: Any, exc: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs debug message. Shorthand for :method:`Logger.record()` with `level='debug'`
+        """Logs debug message. Shorthand for :method:`Logger.record()` with `level='debug'`.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
         ...
 
     def exception(self, message: str, *args: Any, exc: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs exception message. Shorthand for :method:`Logger.record()` with `level='exception'`
+        """Logs exception message. Shorthand for :method:`Logger.record()` with `level='exception'`.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
         ...
 
     def info(self, message: str, *args: Any, exception: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs info message. Shorthand for :method:`Logger.record()` with `level='info'`
+        """Logs info message. Shorthand for :method:`Logger.record()` with `level='info'`.
 
         :param message: Message to be logged
         :type message: str
@@ -133,43 +196,43 @@ class Logger:
         ...
 
     def warn(self, message: str, *args: Any, exc: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs warn message. Shorthand for :method:`Logger.record()` with `level='info'`
+        """Logs warn message. Shorthand for :method:`Logger.record()` with `level='info'`.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
         ...
 
     def error(self, message: str, *args: Any, exc: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs error message. Shorthand for :method:`Logger.record()` with `level='info'`
+        """Logs error message. Shorthand for :method:`Logger.record()` with `level='info'`.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
         ...
 
     def critical(self, message: str, *args: Any, exc: Exception | None = None, **kwargs: dict[str, Any]):
-        """Logs critical message. Shorthand for :method:`Logger.record()` with `level='info'`
+        """Logs critical message. Shorthand for :method:`Logger.record()` with `level='info'`.
 
-        :param message: Message to be logged
+        :param message: Message to be logged.
         :type message: str
-        :param args: Positioned arguments for formatting
+        :param args: Positioned arguments for formatting.
         :type args: Any
-        :param exc: Exception to pin with log message
+        :param exc: Exception to pin with log message.
         :type exc: Exception
-        :param kwargs: Named arguments for formatting
+        :param kwargs: Named arguments for formatting.
         :type kwargs: dict[str, Any]
         """
         ...

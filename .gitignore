@@ -13,7 +13,7 @@ dist/
 # other
 pyrolog.egg-info/
 .idea/
-example.log
+presentation.log
 
 # temporary exclusions
 .readthedocs.yaml
