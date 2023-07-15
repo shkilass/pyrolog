@@ -63,6 +63,18 @@ class LoggingContext:
         for l in self.loggers:
             l.disable()
 
+    def enable_all_groups(self):
+        """Enables all groups pinned to the logging context."""
+
+        for g in self.groups:
+            g.enable()
+
+    def disable_all_groups(self):
+        """Disables all groups pinned to the logging context."""
+
+        for g in self.groups:
+            g.disable()
+
     def get_level_offset(self):
         return len(max(self.log_levels, key=len))
 
