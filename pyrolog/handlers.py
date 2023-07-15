@@ -1,3 +1,20 @@
+"""Module that defines a base of the handlers and all the library handlers.
+
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.StdoutHandler
+
+    As example.
+"""
 
 import datetime
 import sys
@@ -16,6 +33,20 @@ __all__ = ['Handler', 'IOHandler', 'StdoutHandler', 'StderrHandler', 'FileHandle
 
 
 class Handler:
+    """A base of all the handlers.
+
+    :ivar log_level: Log level.
+    :type log_level: LogLevel
+    :ivar formatter: Formatter that will use this handler.
+    :type formatter: Formatter
+    :ivar logging_context: Logging context.
+    :type logging_context: LoggingContext
+    :ivar log_exceptions: Determines whether log exceptions or not.
+    :type log_exceptions: bool
+    :ivar enabled: Determines whether log any message or not. Isn't recommended to change it manually, but you may. Is
+        recommended to use :meth:`enable()` and :meth:`disable()` methods.
+    :type enabled: bool
+    """
 
     def __init__(self,
                  log_level: LogLevel = 'info',
@@ -24,6 +55,18 @@ class Handler:
                  log_exceptions: bool = True,
                  enabled: bool = True,
                  ):
+        """
+        :param log_level: Log level.
+        :type log_level: LogLevel
+        :param formatter: Formatter that will use this handler.
+        :type formatter: Formatter
+        :param logging_context: Logging context.
+        :type logging_context: LoggingContext
+        :param log_exceptions: Determines whether log exceptions or not.
+        :type log_exceptions: bool
+        :param enabled: Determines whether log any message or not.
+        :type enabled: bool
+        """
         self.log_level        = log_level
         self.formatter        = formatter
         self.logging_context  = logging_context
@@ -31,9 +74,13 @@ class Handler:
         self.enabled          = enabled
 
     def enable(self):
+        """Enables handler."""
+
         self.enabled = True
 
     def disable(self):
+        """Disables handler."""
+
         self.enabled = False
 
     @abstractmethod
@@ -52,8 +99,17 @@ class Handler:
 
 
 class IOHandler(Handler):
+    """A base of IO handlers.
+
+    :ivar io: IO to be used to write messages.
+    :type io: TextIO
+    """
 
     def __init__(self, io: TextIO, *args: Any, **kwargs: dict[str, Any]):
+        """
+        :param io: IO to be used to write messages.
+        :type io: TextIO
+        """
         super().__init__(*args, **kwargs)
 
         self.io = io
@@ -93,18 +149,30 @@ class IOHandler(Handler):
 
 
 class StdoutHandler(IOHandler):
+    """Handles stdout output (console).
+    This class is shorthand for IOHandler(sys.stdout, ...)."""
 
     def __init__(self, *args: Any, **kwargs: dict[str, Any]):
         super().__init__(sys.stdout, *args, **kwargs)
 
 
 class StderrHandler(IOHandler):
+    """Handles stderr output (console).
+    This class is shorthand for IOHandler(sys.stdout, ...)."""
 
     def __init__(self, *args: Any, **kwargs: dict[str, Any]):
         super().__init__(sys.stderr, *args, **kwargs)
 
 
 class FileHandler(IOHandler):
+    """Handles file output.
+
+    :ivar file_io: Opened file object.
+    :type file_io: TextIO
+    :ivar path: Path to the file.
+    :type path: str | bytes | PathLike[str] | PathLike[bytes] | int
+    :ivar encoding: Encoding, by default is the UTF-8.
+    :type encoding: str"""
 
     def __init__(self,
                  path: str | bytes | PathLike[str] | PathLike[bytes] | int,
@@ -112,8 +180,15 @@ class FileHandler(IOHandler):
                  *args: Any,
                  **kwargs: dict[str, Any]
                  ):
-        self.file_io  = open(path, 'w', encoding=encoding)
-        self.path     = path
+        """
+        :param path: Path to the file.
+        :type path: str | bytes | PathLike[str] | PathLike[bytes] | int
+        :param encoding: Encoding, by default is the UTF-8.
+        :type encoding: str
+        """
+        self.file_io   = open(path, 'w', encoding=encoding)
+        self.path      = path
+        self.encoding  = encoding
 
         super().__init__(self.file_io, *args, **kwargs)
 

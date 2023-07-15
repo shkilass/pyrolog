@@ -1,3 +1,22 @@
+"""Dedicated module for the :class:`LoggingContext` class.
+
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.LoggingContext
+
+    As example.
+"""
+
+from functools import lru_cache
 
 from ._types import LogLevelDict, LogOnlyLevels, LogLevel
 
@@ -11,18 +30,36 @@ __all__ = ['LoggingContext']
 
 
 class LoggingContext:
+    """Defines some variables that is "unique" for every logging context.
+
+    :ivar log_levels: Dict with the registered log levels.
+    :type log_levels: LogLevelDict
+    :ivar loggers: List with the loggers pinned to logging context instance.
+    :type loggers: list[Logger]
+    :ivar groups: List with the groups pinned to logging context instance.
+    :type groups: list[Group]
+    """
 
     def __init__(self, log_levels: LogLevelDict):
+        """
+        :param log_levels: Dict with the registered log levels.
+        :type log_levels: LogLevelDict
+        """
+
         self.log_levels = log_levels
 
-        self.loggers: list['Logger'] = []
-        self.groups: list['Group'] = []
+        self.loggers: list['Logger']  = []
+        self.groups: list['Group']    = []
 
     def enable_all_loggers(self):
+        """Enables all loggers pinned to the logging context."""
+
         for l in self.loggers:
             l.enable()
 
     def disable_all_loggers(self):
+        """Disables all loggers pinned to the logging context."""
+
         for l in self.loggers:
             l.disable()
 
@@ -35,6 +72,7 @@ class LoggingContext:
     def get_group_name_offset(self):
         return 0 if len(self.groups) == 0 else len(max(self.groups, key=lambda g: len(g.name_path)).name_path)
 
+    @lru_cache(10)
     def log_level(self, level: LogLevel, context_level: str | int):
 
         if isinstance(level, LogOnlyLevels):

@@ -1,6 +1,6 @@
 
 """
-    Pyrolog. Pretty logging library
+    Pyrolog. Pretty logging library.
     Copyright (C) 2023  ftdot (https://github.com/ftdot)
 """
 
@@ -21,16 +21,24 @@ from .colors import *
 
 
 def get_plain_logger(log_level: types.LogLevel = 'info'):
+    """Gets logger (unnamed) with StdoutHandler and plain formatter. Also, uses given log level.
+
+    :param log_level: Log level
+    :type log_level: types.LogLevel
+    """
+
     return Logger(
-        handlers=[
-            StdoutHandler(log_level=log_level)
-        ]
+        handlers=[StdoutHandler(log_level=log_level), ]
     )
 
 
 def get_colored_logger(log_level: types.LogLevel = 'info'):
+    """Gets logger (unnamed) with StdoutHandler and colored formatter. Also, uses given log level.
+
+    :param log_level: Log level
+    :type log_level: types.LogLevel
+    """
+
     return Logger(
-        handlers=[
-            StdoutHandler(log_level=log_level, formatter=ColoredFormatter())
-        ]
+        handlers=[StdoutHandler(log_level=log_level, formatter=ColoredFormatter()), ]
     )

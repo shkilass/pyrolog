@@ -1,9 +1,24 @@
+"""Contains empty version of the color bindings of the colorama library. See :mod:`pyrolog.colors`.
 
-__all__ = ['EmptyTextColor', 'EmptyBGColor', 'EmptyTextStyle']
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.empty_colors.EmptyTextColor
+
+    As example.
+"""
 
 
 class EmptyTextColor:
-    """Bindings to colorama Fore colors"""
+    """Empty variant of :class:`pyrolog.TextColor`."""
 
     reset         = ''
     black         = ''
@@ -25,29 +40,29 @@ class EmptyTextColor:
 
 
 class EmptyBGColor:
-    """Bindings to colorama Back colors"""
+    """Empty variant of :class:`pyrolog.BGColor`."""
 
-    reset = ''
-    black = ''
-    red = ''
-    green = ''
-    blue = ''
-    cyan = ''
-    yellow = ''
-    magenta = ''
-    white = ''
-    lightblack = ''
-    lightred = ''
-    lightgreen = ''
-    lightblue = ''
-    lightcyan = ''
-    lightyellow = ''
-    lightmagenta = ''
-    lightwhite = ''
+    reset         = ''
+    black         = ''
+    red           = ''
+    green         = ''
+    blue          = ''
+    cyan          = ''
+    yellow        = ''
+    magenta       = ''
+    white         = ''
+    lightblack    = ''
+    lightred      = ''
+    lightgreen    = ''
+    lightblue     = ''
+    lightcyan     = ''
+    lightyellow   = ''
+    lightmagenta  = ''
+    lightwhite    = ''
 
 
 class EmptyTextStyle:
-    """Bindings to colorama Style"""
+    """Empty variant of :class:`pyrolog.TextStyle`."""
 
     reset   = ''
     dim     = ''

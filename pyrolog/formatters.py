@@ -1,3 +1,20 @@
+"""Contains base of formatters and all defined in the library formatters.
+
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.PlainFormatter
+
+    As example.
+"""
 
 import traceback
 import datetime
@@ -22,14 +39,26 @@ from typing import Any
 __all__ = ['fmt', 'Uncolored', 'Formatter', 'PlainFormatter', 'ColoredFormatter']
 
 fmt = namedtuple('FormatTuple', ('format_string', 'string'))
+"""Special type to specify formatting in :class:`ColoredFormatter` use case."""
 
 ####
 
 
 class Uncolored:
+    """Used in context where required to log an object to the :class:`ColoredFormatter` without colors.
+
+    :ivar value: Original value.
+    :type value: Any
+    """
 
     def __init__(self, value: Any):
+        """
+        :param value: Any value you want to pass to the :class:`ColoredFormatter` without colors.
+        """
         self.value = value
+
+    def __format__(self, format_spec):
+        return self.value.__format__(format_spec)
 
     def __str__(self):
         return str(self.value)
@@ -41,6 +70,19 @@ class Uncolored:
 
 
 class Formatter:
+    """A base of all the formatters.
+
+    :ivar format_string: Format string.
+    :type format_string: str
+    :ivar time_format_string: Format string of the time.
+    :type time_format_string: str
+    :ivar static_variables: Static variables. (can be used in messages)
+    :type static_variables: VarDict | None
+    :ivar logging_context: Logging context.
+    :type logging_context: LoggingContext
+    :ivar time_formatting: (**System variable.** Do not change it manually) Determines whether to spend time formatting time.
+    :type time_formatting: bool
+    """
 
     def __init__(self,
                  format_string: str = MINIMAL_FORMAT_STRING,
@@ -48,6 +90,17 @@ class Formatter:
                  static_variables: VarDict | None = None,
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT
                  ):
+        """
+        :param format_string: Format string.
+        :type format_string: str
+        :param time_format_string: Format string of the time.
+        :type time_format_string: str
+        :param static_variables: Static variables. (can be used in messages)
+        :type static_variables: VarDict | None
+        :param logging_context: Logging context.
+        :type logging_context: LoggingContext
+        """
+
         self._format_string      = format_string
         self.time_format_string  = time_format_string
         self.static_variables    = {} if static_variables is None else static_variables
@@ -67,9 +120,23 @@ class Formatter:
         self.time_formatting  = '{time}' in value
 
     def add_static_variable(self, name: str, value: Any):
+        """Adds static variable.
+
+        :param name: Name of the static variable.
+        :type name: str
+        :param value: Value of the static variable.
+        :type value: Any
+        """
+
         self.static_variables[name] = value
 
     def del_static_variable(self, name: str) -> bool:
+        """Deletes static variable.
+
+        :param name: Name of the static variable to be deleted.
+        :type name: str
+        """
+
         if name in self.static_variables:
             del self.static_variables[name]
             return True
@@ -99,19 +166,27 @@ class Formatter:
 
 
 class PlainFormatter(Formatter):
+    """Plain formatter with offsets support.
+
+    :ivar offsets: Determines whether to use offsets or not.
+    :type offsets: bool
+    """
 
     def __init__(self, *args: Any, offsets: bool = True, **kwargs: dict[str, Any]):
-
+        """
+        :param offsets: If True, format string can use offsets to prettify output.
+        :type offsets: bool
+        """
         super().__init__(*args, **kwargs)
 
         self.offsets                                 = offsets
         self.static_variables['level_offset']        = self.logging_context.get_level_offset() if offsets else 0
         self.static_variables['logger_name_offset']  = self.logging_context.get_logger_name_offset() if offsets else 0
         self.static_variables['group_name_offset']   = self.logging_context.get_group_name_offset() if offsets else 0
-        self.static_variables['fore'] = empty_colors.EmptyTextColor
-        self.static_variables['bg'] = empty_colors.EmptyBGColor
-        self.static_variables['style'] = empty_colors.EmptyTextStyle
-        self.static_variables['reset'] = ''
+        self.static_variables['fore']                = empty_colors.EmptyTextColor
+        self.static_variables['bg']                  = empty_colors.EmptyBGColor
+        self.static_variables['style']               = empty_colors.EmptyTextStyle
+        self.static_variables['reset']               = ''
 
     def format_message(self,
                        message: str,
@@ -185,6 +260,13 @@ class PlainFormatter(Formatter):
 
 
 class ColoredFormatter(PlainFormatter):
+    """Colored formatter.
+
+    :ivar color_dict: Dict with the colors used to color formatting arguments by its type.
+    :type color_dict: ColorDict
+    :ivar use_repr: If it set to True, repr() will be used instead of str() while format arguments.
+    :type use_repr: bool
+    """
 
     def __init__(self,
                  format_string: str = COLORED_MINIMAL_FORMAT_STRING,
@@ -193,7 +275,18 @@ class ColoredFormatter(PlainFormatter):
                  color_dict: ColorDict = DEFAULT_COLOR_DICT,
                  use_repr: bool = False,
                  **kwargs: dict[str, Any]):
+        """
+        :param format_string: Format string.
+        :type format_string: str
+        :param time_format_string: Format string of the time.
+        :type time_format_string: str
+        :param color_dict: Dict with the colors used to color formatting arguments by its type.
+        :type color_dict: ColorDict
+        :param use_repr: If it set to True, repr() will be used instead of str() while format arguments.
+        :type use_repr: bool
+        """
         super().__init__(format_string, time_format_string, *args, **kwargs)
+
         self.color_dict  = color_dict
         self.use_repr    = use_repr
 
@@ -204,13 +297,13 @@ class ColoredFormatter(PlainFormatter):
 
         self._func = repr if use_repr else str
 
-    def get_level_color(self, level: str):
+    def get_level_color(self, level: str) -> str:
         if level in self.color_dict['levels']:
             return self.color_dict['levels'][level]
         else:
             return ''
 
-    def get_value_color(self, type_: type):
+    def get_value_color(self, type_: type) -> str:
         if type_ in self.color_dict['types']:
             return self.color_dict['types'][type_]
         elif isinstance(type_, Exception):
@@ -218,7 +311,7 @@ class ColoredFormatter(PlainFormatter):
         else:
             return self.color_dict['types']['all']
 
-    def format_value(self, value: Any):
+    def format_value(self, value: Any) -> str:
         if isinstance(value, fmt):
             value_color = self.get_value_color(type(value[1]))
             return value_color + value[0].format(value[1])
@@ -261,7 +354,7 @@ class ColoredFormatter(PlainFormatter):
                        group_name: str,
                        group_color: str,
                        fmt_args: list[Any],
-                       fmt_kwargs: dict[str, Any]):
+                       fmt_kwargs: dict[str, Any]) -> str:
         return message.format(
             level=level,
             level_color=level_color,
@@ -284,7 +377,7 @@ class ColoredFormatter(PlainFormatter):
                group_color: str,
                fmt_args: list[Any],
                fmt_kwargs: dict[str, Any]
-               ):
+               ) -> str:
         colored_args    = [self.format_value(a) for a in fmt_args]
         colored_kwargs  = {k: self.format_value(v) for k, v in fmt_kwargs.items()}
         level_color     = self.get_level_color(level)
@@ -332,3 +425,4 @@ class ColoredFormatter(PlainFormatter):
         )
 
 defined_formatters: list[Formatter] = []
+"""List with the defined formatters."""

@@ -1,3 +1,20 @@
+"""Module with the default definitions of library.
+
+.. important::
+    Due to the library's import system, if you import `pyrolog` by this code:
+
+    .. code-block:: python
+
+        import pyrolog
+
+    You must use this as:
+
+    .. code-block:: python
+
+        pyrolog.defaults.DEFAULT_LOG_LEVELS
+
+    As example.
+"""
 
 from .logging_context import LoggingContext
 from .colors import *
