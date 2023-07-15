@@ -61,28 +61,34 @@ class Logger:
         :param logger_color: Color of the logger. (visible only by using ColoredFormatter)
         :type logger_color: str
         :param group: Group of the logger. If it is not None, then copies all parameters from that group.
-        :type group: Group | None
+        :type group: Group | str | None
         :param enabled: If it is set to False, logger will not log any messages.
         :type enabled: bool
         """
 
-        if group is not None:
-            self.handlers         = group.handlers
-            self.logging_context  = group.logging_context
-            self.enabled          = group.enabled
-
-            self.group_name_path = group.name_path
-            self.group_color = group.group_color
-
-            group.loggers.append(self)
-
-        else:
+        if group is None:
             self.handlers         = [handlers, ] if isinstance(handlers, Handler) else handlers
             self.logging_context  = logging_context
             self.enabled          = enabled
 
-            self.group_name_path = '*'
-            self.group_color = ''
+            self.group_name_path  = '*'
+            self.group_color      = ''
+
+        else:
+            if isinstance(group, str):
+                if group not in logging_context.groups_by_name:
+                    raise NameError(f'Group "{group}" isn\'t defined in given logging context.')
+
+                group = logging_context.groups_by_name[group]
+
+            self.handlers         = group.handlers
+            self.logging_context  = group.logging_context
+            self.enabled          = group.enabled
+
+            self.group_name_path  = group.name_path
+            self.group_color      = group.group_color
+
+            group.loggers.append(self)
 
         self.name          = name
         self.logger_color  = logger_color

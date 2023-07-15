@@ -54,7 +54,7 @@ class Group:
                  logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT,
                  group_color: str = '',
                  enabled: bool = True,
-                 parent_group: 'Group | None' = None
+                 parent_group: 'Group | str | None' = None
                  ):
         """
         :param name: Name of the group.
@@ -69,7 +69,7 @@ class Group:
             will be disabled.
         :type enabled: bool
         :param parent_group: Parent of this group. If it is not None, then copies all parameters from that group.
-        :type parent_group: Group | None
+        :type parent_group: Group | str | None
         """
 
         if parent_group is None:
@@ -82,6 +82,12 @@ class Group:
             self.name_path        = name
 
         else:
+            if isinstance(parent_group, str):
+                if parent_group not in logging_context.groups_by_name:
+                    raise NameError(f'Group "{parent_group}" isn\'t defined in given logging context.')
+
+                parent_group = logging_context.groups_by_name[parent_group]
+
             self.handlers         = parent_group.handlers
             self.logging_context  = parent_group.logging_context
             self.enabled          = parent_group.enabled
@@ -96,6 +102,7 @@ class Group:
         self.parent_group             = parent_group
 
         self.logging_context.groups.append(self)
+        self.logging_context.groups_by_name[name] = self
         update_group_name_offset(self.logging_context)
 
     def enable(self):

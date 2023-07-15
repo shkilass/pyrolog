@@ -38,6 +38,8 @@ class LoggingContext:
     :type loggers: list[Logger]
     :ivar groups: List with the groups pinned to logging context instance.
     :type groups: list[Group]
+    :ivar groups_by_name: Dictionary with groups with names as keys.
+    :type groups_by_name: dict[str, 'Group']
     """
 
     def __init__(self, log_levels: LogLevelDict):
@@ -48,8 +50,9 @@ class LoggingContext:
 
         self.log_levels = log_levels
 
-        self.loggers: list['Logger']  = []
-        self.groups: list['Group']    = []
+        self.loggers: list['Logger']             = []
+        self.groups: list['Group']               = []
+        self.groups_by_name: dict[str, 'Group']  = {}
 
     def enable_all_loggers(self):
         """Enables all loggers pinned to the logging context."""
