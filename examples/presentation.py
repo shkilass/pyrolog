@@ -6,12 +6,14 @@ import math
 
 # MAIN
 
+colored_formatter = pyrolog.ColoredFormatter(
+    format_string=pyrolog.defaults.COLORED_MAXIMUM_FORMAT_STRING
+)
+
 # declare stdout handler with log level - debug
 sout_handler = pyrolog.StdoutHandler(
     log_level='debug',
-    formatter=pyrolog.ColoredFormatter(
-        format_string=pyrolog.defaults.COLORED_MAXIMUM_FORMAT_STRING
-    )
+    formatter=colored_formatter
 )
 
 # declare file handler with log_level - debug
@@ -138,7 +140,7 @@ helloworld_plugin_logger  = plugins_group.logger('HelloWorldPlugin')
 core_plugin_logger.info('Plugin loaded!')
 helloworld_plugin_logger.info('Plugin loaded!')
 
-core_plugin_logger.info('Pyrolog version: {}', '.'.join([str(i) for i in pyrolog.__version__]))
+core_plugin_logger.debug('Pyrolog version: {}', pyrolog.__version__)
 helloworld_plugin_logger.info('Hello, world!')
 
 # it saves offsets
@@ -152,7 +154,7 @@ core_plugin_subgroup = plugins_group.subgroup(
 
 core_plugin_logger_auth = core_plugin_subgroup.logger('AuthSystem')
 
-core_plugin_logger_auth.info('New user authorized with the username {}', 'ftdot')
+core_plugin_logger_auth.debug('New user authorized with the username {}', 'ftdot')
 
 # many subgroups
 
@@ -171,6 +173,50 @@ idk_how_name_this.info(':)')
 core_plugin_subgroup.disable()
 
 idk_how_name_this.info('This will not be logged')
+
+# logger with group by string
+some_other_plugin_logger = pyrolog.Logger(name='SomeOtherPlugin', group='Plugins')
+
+some_other_plugin_logger.debug(
+    'Some other plugin that uses {} group by passing string to {} argument',
+    'Plugins',
+    'group'
+)
+
+# log only levels demo
+
+only_warns_logger = pyrolog.Logger(
+    name='OnlyWarnsLogger',
+    handlers=[
+        pyrolog.StdoutHandler(
+            log_level=pyrolog.LogOnlyLevels(['warn', ]),
+            formatter=colored_formatter
+        )
+    ]
+)
+
+only_warns_logger.debug('Level: {}', 'debug')
+only_warns_logger.exception('Level: {}', 'exception')
+only_warns_logger.info('Level: {}', 'info')
+only_warns_logger.warn('Level: {} (This is will be logged)', 'warn')
+only_warns_logger.error('Level: {}', 'error')
+only_warns_logger.critical('Level: {}', 'critical')
+
+# example use of this feature:
+
+logger = pyrolog.Logger(
+    name='SomeLogger',
+    handlers=[
+        pyrolog.StderrHandler(log_level=pyrolog.LogOnlyLevels(['exception', 'error', 'critical']),
+                              formatter=colored_formatter),
+        # NOTE: ^^^^^^^^^^^^^ is handler to the stderr.
+        pyrolog.StdoutHandler(log_level=pyrolog.LogOnlyLevels(['debug', 'info', 'warn']),
+                              formatter=colored_formatter)
+    ]
+)
+
+logger.info('It message is logged to the stdout')
+logger.error('It message is logged to the stderr')
 
 ####
 
