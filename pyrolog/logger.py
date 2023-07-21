@@ -22,6 +22,7 @@ from .handlers import Handler
 from .utils import make_logger_binding, update_logger_name_offset
 from .logging_context import LoggingContext
 from .defaults import DEFAULT_LOGGING_CONTEXT
+from ._types import LogLevel
 
 from typing import TYPE_CHECKING, Any, Self
 
@@ -75,20 +76,7 @@ class Logger:
             self.group_color      = ''
 
         else:
-            if isinstance(group, str):
-                if group not in logging_context.groups_by_name:
-                    raise NameError(f'Group "{group}" isn\'t defined in given logging context.')
-
-                group = logging_context.groups_by_name[group]
-
-            self.handlers         = group.handlers
-            self.logging_context  = group.logging_context
-            self.enabled          = group.enabled
-
-            self.group_name_path  = group.name_path
-            self.group_color      = group.group_color
-
-            group.loggers.append(self)
+            self.to_group(group)
 
         self.name          = name
         self.logger_color  = logger_color
@@ -96,6 +84,57 @@ class Logger:
 
         self.logging_context.loggers.append(self)
         update_logger_name_offset(self.logging_context)
+
+    def to_group(self, group: 'Group | str'):
+        """Moves logger to the given group.
+
+        :param group: Group where be placed logger.
+        :type group: Group | str
+        """
+
+        if isinstance(group, str):
+            if group not in logging_context.groups_by_name:
+                raise NameError(f'Group "{group}" isn\'t defined in given logging context.')
+
+            group = logging_context.groups_by_name[group]
+
+        self.handlers         = group.handlers
+        self.logging_context  = group.logging_context
+        self.enabled          = group.enabled
+
+        self.group_name_path  = group.name_path
+        self.group_color      = group.group_color
+
+        group.loggers.append(self)
+
+    def set_level(self, level: LogLevel):
+        """Sets given log level to all handlers.
+
+        :param level: Log level.
+        :type level: LogLevel
+        """
+
+        for h in self.handlers:
+            h.set_level(level)
+
+    def add_handler(self, handler: Handler):
+        """Adds a new handler to the logger.
+
+        :param handler: New handler to be added.
+        :type handler: Handler
+        """
+
+        self.handlers.append(handler)
+
+    def remove_handler(self, handler: Handler):
+        """Removes handler from the logger. **Ignores if handler isn't used in logger.**
+
+        :param handler: Handler to be removed.
+        :type handler: Handler
+        """
+
+        if handler in self.handlers:
+            self.handlers.remove(handler)
 
     def enable(self):
         """Enables a logger."""
