@@ -12,7 +12,7 @@
 
 ### Contents
 
-[![WIP](https://img.shields.io/badge/%23-Installation-green?style=for-the-badge)](#installation)
+[![Installation](https://img.shields.io/badge/%23-Installation-green?style=for-the-badge)](#installation)
 
 [![License](https://img.shields.io/badge/%23-License-blue?style=for-the-badge)](#-license)
 
@@ -20,16 +20,12 @@
 
 🇺🇦 Made with ❤️ in Ukraine!
 
-## ☢️ WIP
+## Installation
 
-**Work In Progress**. Currently available version `pyrolog v2.1.1-beta`.
-
-You can install\update by using these commands:
+You can install\update by using this command:
 
 ```shell
-$ git clone https://github.com/ftdot/pyrolog
-$ cd pyrolog
-$ pip install -U .
+$ pip install -U pyrolog
 ```
 
 > **Warning**
