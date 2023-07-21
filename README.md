@@ -6,20 +6,23 @@
 ---
 
 [![Issues](https://img.shields.io/github/issues/ftdot/pyrolog?style=for-the-badge)](https://github.com/ftdot/pyrolog/issues)
-
+[![Latest release](https://img.shields.io/github/v/release/ftdot/pyrolog?style=for-the-badge)](https://github.com/ftdot/pyrolog/releases)
+[![PyPI](https://img.shields.io/pypi/v/pyrolog?style=for-the-badge)](https://pypi.org/project/pyrolog)
 ---
 
 ### Contents
 
-[![WIP](https://img.shields.io/badge/%23-Work_In_Progress-orange?style=for-the-badge)](#%EF%B8%8F-wip)
+[![WIP](https://img.shields.io/badge/%23-Installation-green?style=for-the-badge)](#installation)
 
 [![License](https://img.shields.io/badge/%23-License-blue?style=for-the-badge)](#-license)
 
 ---
 
+🇺🇦 Made with ❤️ in Ukraine!
+
 ## ☢️ WIP
 
-**Work In Progress**. Currently available version `pyrolog v2.0.0-beta`.
+**Work In Progress**. Currently available version `pyrolog v2.1.1-beta`.
 
 You can install\update by using these commands:
 
@@ -38,6 +41,9 @@ If you want to contribute: just fork, commit you changes and create PR [there](h
 Don't forget to comment your changes while contributing!
 
 ### 📃 License
+
+- Pyrolog library source code is under LGPL-2.1 license.
+- Build utilities (utils/ directory) source code is under MIT license.
 
 By copying, distributing and modification this library, you agree with
 [GNU LGPL 2.1 Terms](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).
@@ -63,4 +69,28 @@ License also provides NO WARRANTY for this library!
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
     USA
+```
+
+```
+MIT License
+
+Copyright (c) 2023 ftdot (https://github.com/ftdot)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
