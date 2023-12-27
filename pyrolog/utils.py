@@ -52,7 +52,7 @@ def make_logger_binding(level: str) -> Callable:
 
 def make_new_log_level(logger_class: 'Logger',
                        name: str,
-                       level: str,
+                       level: int,
                        logging_context: LoggingContext = DEFAULT_LOGGING_CONTEXT
                        ):
     """Makes new log level and function-bind for it. Also adds function-bind to :class:`Logger` class.
