@@ -25,7 +25,8 @@ DEFAULT_LOG_LEVELS = {
     'info': 15,
     'warn': 20,
     'error': 25,
-    'critical': 30
+    'critical': 30,
+    'notset': 9999,
 }
 """The default log levels dictionary."""
 
