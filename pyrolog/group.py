@@ -92,10 +92,9 @@ class Group:
             self.logging_context  = parent_group.logging_context
             self.enabled          = parent_group.enabled
             self.name_path        = parent_group.name_path + '.' + name
+            self.group_color      = parent_group.group_color
 
             parent_group.subgroups.append(self)
-
-        self.group_color              = group_color
         self.name                     = name
         self.subgroups: list[Group]   = []
         self.loggers: list['Logger']  = []

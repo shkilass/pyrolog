@@ -86,5 +86,5 @@ COLORED_MINIMAL_TIME_FORMAT_STRING = '{fore.cyan}{hour:02d}{fore.reset}:{fore.cy
 COLORED_MAXIMUM_TIME_FORMAT_STRING = '{fore.cyan}{year:04d}{fore.reset}.{fore.cyan}{month:02d}{fore.reset}.{fore.cyan}{day:02d}{fore.reset} {fore.cyan}{hour:02d}{fore.reset}:{fore.cyan}{minute:02d}{fore.reset}:{fore.cyan}{second:02d}{fore.reset}.{fore.lightmagenta}{microsecond}{fore.reset}'
 """Colored time format specification that is recommended for professional, large projects."""
 
-COLORED_MAXIMUM_FORMAT_STRING = '{time} | {level_color}{level:<{level_offset}}{reset} | {group_name:<{group_name_offset}} | {logger_color}{logger_name:<{logger_name_offset}}{reset} -> {message}'
+COLORED_MAXIMUM_FORMAT_STRING = '{time} | {level_color}{level:<{level_offset}}{reset} | {group_color}{group_name:<{group_name_offset}}{reset} | {logger_color}{logger_name:<{logger_name_offset}}{reset} -> {message}'
 """Colored format specification that is recommended for professional, large projects."""
