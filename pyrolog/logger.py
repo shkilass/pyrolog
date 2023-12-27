@@ -76,6 +76,7 @@ class Logger:
             self.group_color      = ''
 
         else:
+            self.logging_context = logging_context if isinstance(group, str) else group.logging_context
             self.to_group(group)
 
         self.name          = name
@@ -93,10 +94,10 @@ class Logger:
         """
 
         if isinstance(group, str):
-            if group not in logging_context.groups_by_name:
+            if group not in self.logging_context.groups_by_name:
                 raise NameError(f'Group "{group}" isn\'t defined in given logging context.')
 
-            group = logging_context.groups_by_name[group]
+            group = self.logging_context.groups_by_name[group]
 
         self.handlers         = group.handlers
         self.logging_context  = group.logging_context
