@@ -4,8 +4,8 @@ pyrolog/__pycache__/
 examples/__pycache__/
 
 # docs builded files
-# docs/build/*
-# !docs/build/.gitkeep
+docs/build/*
+!docs/build/.gitkeep
 
 # pypi build
 dist/
@@ -14,7 +14,3 @@ dist/
 pyrolog.egg-info/
 .idea/
 presentation.log
-
-# temporary exclusions
-.readthedocs.yaml
-docs/
