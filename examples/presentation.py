@@ -52,13 +52,13 @@ main_logger.info('{} -- {}', 'pi is', pyrolog.fmt('{:.2f}', math.pi))
 try:
     printt('Hello, world!')
 except Exception as e:
-    # NOTE: You can use also debug, critical and other log levels to print exception
+    # NOTE: You can use also debug, critical and other log levels to print exceptions
     main_logger.exception('Exception example', exc=e)
 
 main_logger.info('It is continue work')
 
 # uncolored type
-main_logger.info('Uncolored int: {} str: {}',
+main_logger.info('Uncolored float: {} str: {}',
                  pyrolog.Uncolored(math.pi),
                  pyrolog.Uncolored('some string'))
 
@@ -125,7 +125,7 @@ another_logger.debug('My handler is disabled')
 
 # GROUPS
 
-# creating sample group
+# creating simple group
 
 plugins_group = pyrolog.Group(
     name='Plugins',
@@ -217,6 +217,8 @@ logger = pyrolog.Logger(
 
 logger.info('It message is logged to the stdout')
 logger.error('It message is logged to the stderr')
+
+# custom log levels
 
 ####
 
