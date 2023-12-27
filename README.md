@@ -8,11 +8,17 @@
 [![Issues](https://img.shields.io/github/issues/ftdot/pyrolog?style=for-the-badge)](https://github.com/ftdot/pyrolog/issues)
 [![Latest release](https://img.shields.io/github/v/release/ftdot/pyrolog?style=for-the-badge)](https://github.com/ftdot/pyrolog/releases)
 [![PyPI](https://img.shields.io/pypi/v/pyrolog?style=for-the-badge)](https://pypi.org/project/pyrolog)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyrolog?style=for-the-badge)
+
 ---
 
 ### Contents
 
 [![Installation](https://img.shields.io/badge/%23-Installation-green?style=for-the-badge)](#installation)
+
+[![Basic example](https://img.shields.io/badge/%23-Basic_example-blue?style=for-the-badge)](#basic-example)
+
+[![Most all the features](https://img.shields.io/badge/%23-Most_all_the_features-blue?style=for-the-badge)](#most-all-the-features-example)
 
 [![License](https://img.shields.io/badge/%23-License-blue?style=for-the-badge)](#-license)
 
@@ -35,6 +41,34 @@ $ pip install -U pyrolog
 
 If you want to contribute: just fork, commit you changes and create PR [there](https://github.com/ftdot/pyrolog/pulls).
 Don't forget to comment your changes while contributing!
+
+## Basic example
+
+After you installed the library, you can create your first logger:
+
+```python
+
+import pyrolog
+
+# You can use debug, exception, info, warn, error, critical log levels.
+# exception - is log level that recommended to use by default, if you don't want to log debug information
+logger = pyrolog.get_colored_logger('exception')
+
+x = 12
+
+# loggers supports formatting. With colored loggers it will be pretty colored
+logger.info('x is {}', x)
+
+```
+
+There is only 1% of all the features.
+See the example below for more features
+
+## Most all the features example
+
+<img align="center" src="https://github.com/ftdot/pyrolog/blob/master/presentation.png?raw=true" />
+
+There is not all the features. See the [docs](https://pyrolog.readthedocs.org/)
 
 ### 📃 License
 
