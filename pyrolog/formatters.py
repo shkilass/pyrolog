@@ -255,7 +255,7 @@ class PlainFormatter(Formatter):
             hour=time.hour,
             minute=time.minute,
             second=time.second,
-            microsecond=time.microsecond,  # str(time.microsecond)[:4]
+            microsecond=str(time.microsecond)[:6].ljust(6),
         )
 
 
