@@ -39,11 +39,11 @@ VersionInfo = namedtuple('VersionInfo', ['major', 'minor', 'patch', 'release_lev
         from pyrolog.version import VersionInfo
 """
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 """String with the current version of the library"""
 
-__version_tuple__ = (2, 2, 0)
+__version_tuple__ = (2, 2, 1)
 """Tuple with the current version of the library"""
 
-__version_info__ = VersionInfo(*__version_tuple__, 'beta', '4c35a4b')
+__version_info__ = VersionInfo(*__version_tuple__, 'beta', '50f233c')
 """Named tuple with the current version + technical details of the library release"""
