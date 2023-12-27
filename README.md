@@ -9,6 +9,7 @@
 [![Latest release](https://img.shields.io/github/v/release/ftdot/pyrolog?style=for-the-badge)](https://github.com/ftdot/pyrolog/releases)
 [![PyPI](https://img.shields.io/pypi/v/pyrolog?style=for-the-badge)](https://pypi.org/project/pyrolog)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyrolog?style=for-the-badge)
+[![Documentation](https://img.shields.io/readthedocs/pyrolog?style=for-the-badge)](https://pyrolog.readthedocs.io)
 
 ---
 
