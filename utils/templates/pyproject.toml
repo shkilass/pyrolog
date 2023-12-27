@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyrolog"
-version = "2.2.1"
+version = "{{ version }}"
 description = "Pretty modern colored logging library"
 readme = "README.md"
 authors = [{ name = "ftdot", email = "ftdoot@gmail.com" }]

@@ -147,6 +147,14 @@ class IOHandler(Handler):
 
             self.io.flush()
 
+    def set_level(self, level: LogLevel):
+        """Sets log level of handler to given.
+
+        :param level: Log level.
+        :type level: LogLevel
+        """
+        self.log_level = level
+
 
 class StdoutHandler(IOHandler):
     """Handles stdout output (console).
