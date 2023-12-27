@@ -218,7 +218,69 @@ logger = pyrolog.Logger(
 logger.info('It message is logged to the stdout')
 logger.error('It message is logged to the stderr')
 
-# custom log levels
+####
+
+# CUSTOM LOG LEVELS
+
+# create custom level
+pyrolog.utils.make_new_log_level(
+    pyrolog.Logger,  # class
+    'trace',         # name of the new log level
+    2,               # 5 - debug, trace is lower than debug
+)
+
+main_logger.trace('This message will not be logged, {}', 'because main logger is not TRACE log level')
+
+trace_logger = pyrolog.Logger(
+    name='TraceLogger',
+    handlers=[
+        pyrolog.StdoutHandler(
+            log_level='trace',
+            formatter=colored_formatter,
+        )
+    ]
+)
+
+trace_logger.trace('Level: {}', 'trace')
+trace_logger.debug('Level: {}', 'debug')
+trace_logger.exception('Level: {}', 'exception')
+trace_logger.info('Level: {}', 'info')
+trace_logger.warn('Level: {} (This is will be logged)', 'warn')
+trace_logger.error('Level: {}', 'error')
+trace_logger.critical('Level: {}', 'critical')
+
+####
+
+# CUSTOM COLORS
+
+# copy default color dict
+custom_color_dict            = {}
+custom_color_dict['types']   = dict(pyrolog.defaults.DEFAULT_COLOR_DICT['types'])
+custom_color_dict['levels']  = dict(pyrolog.defaults.DEFAULT_COLOR_DICT['levels'])
+
+custom_color_dict['levels']['trace'] = pyrolog.TextColor.lightgreen
+
+custom_trace_logger = pyrolog.Logger(
+    name='TraceLogger',
+    handlers=[
+        pyrolog.StdoutHandler(
+            log_level='trace',
+            formatter=pyrolog.ColoredFormatter(
+                format_string=pyrolog.defaults.COLORED_MAXIMUM_FORMAT_STRING,
+                color_dict=custom_color_dict,
+            ),
+        )
+    ]
+)
+
+custom_trace_logger.trace('Trace has a new color now')
+
+trace_logger.trace('But only for one logger (formatter)')
+
+# globally create custom color
+pyrolog.defaults.DEFAULT_COLOR_DICT['levels']['trace'] = pyrolog.TextColor.lightgreen
+
+trace_logger.trace('But after update of the global color dict, {} has own color', 'trace')
 
 ####
 
