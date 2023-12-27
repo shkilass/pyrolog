@@ -92,7 +92,7 @@ class Group:
             self.logging_context  = parent_group.logging_context
             self.enabled          = parent_group.enabled
             self.name_path        = parent_group.name_path + '.' + name
-            self.group_color      = parent_group.group_color
+            self.group_color      = parent_group.group_color if group_color == '' else group_color
 
             parent_group.subgroups.append(self)
         self.name                     = name
@@ -135,8 +135,9 @@ class Group:
 
         .. code-block:: python
 
-            example_group   = pyrolog.Group('ExampleGroup', handlers=[..., ])
-            example_logger  = example_group.group(name='ExampleLogger', group_color=pyrolog.TextColor.red)
+            example_group      = pyrolog.Group('ExampleGroup', handlers=[..., ])
+            example_sub_group  = example_group.subgroup()
+            example_logger     = example_group.group(name='ExampleLogger', group_color=pyrolog.TextColor.red)
         """
         return Group(*args, **kwargs, parent_group=self)
 
