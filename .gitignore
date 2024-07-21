@@ -9,6 +9,7 @@ docs/build/*
 
 # pypi build
 dist/
+build/
 
 # other
 pyrolog.egg-info/
