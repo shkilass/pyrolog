@@ -1,6 +1,6 @@
 
 <img align="left" width="340px" src="https://github.com/ftdot/pyrolog/blob/master/banner.png?raw=true" />
-<h1><strong>🔥 Pyrolog</strong> <i>WIP</i></h1>
+<h1><strong>🔥 Pyrolog</strong></h1>
 <p>Pretty logging — Pretty project</p>
 
 ---
@@ -34,11 +34,6 @@ You can install\update by using this command:
 ```shell
 $ pip install -U pyrolog
 ```
-
-> **Warning**
-> 
-> Beta version doesn't guarantee correct work.
-> You can report any issue [there](https://github.com/ftdot/pyrolog/issues).
 
 If you want to contribute: just fork, commit you changes and create PR [there](https://github.com/ftdot/pyrolog/pulls).
 Don't forget to comment your changes while contributing!
