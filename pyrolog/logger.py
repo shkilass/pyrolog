@@ -77,7 +77,7 @@ class Logger:
 
         else:
             self.logging_context = logging_context if isinstance(group, str) else group.logging_context
-            self.to_group(group)
+            self.change_group(group)
 
         self.name          = name
         self.logger_color  = logger_color
@@ -86,7 +86,7 @@ class Logger:
         self.logging_context.loggers.append(self)
         update_logger_name_offset(self.logging_context)
 
-    def to_group(self, group: 'Group | str'):
+    def change_group(self, group: 'Group | str'):
         """Moves logger to the given group.
 
         :param group: Group where be placed logger.
