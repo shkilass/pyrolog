@@ -274,6 +274,8 @@ class ColoredFormatter(PlainFormatter):
                  *args: Any,
                  color_dict: ColorDict = DEFAULT_COLOR_DICT,
                  use_repr: bool = False,
+                 unpack_lists: bool = False,
+                 unpack_dicts: bool = False,
                  **kwargs: dict[str, Any]):
         """
         :param format_string: Format string.
@@ -284,11 +286,17 @@ class ColoredFormatter(PlainFormatter):
         :type color_dict: ColorDict
         :param use_repr: If it set to True, repr() will be used instead of str() while format arguments.
         :type use_repr: bool
+        :param unpack_lists: Splits the elements by commas.
+        :type unpack_lists: bool
+        :param unpack_dicts: Splits the elements by commas and arrows (=>).
+        :type unpack_dicts: bool
         """
         super().__init__(format_string, time_format_string, *args, **kwargs)
 
-        self.color_dict  = color_dict
-        self.use_repr    = use_repr
+        self.color_dict    = color_dict
+        self.use_repr      = use_repr
+        self.unpack_lists  = unpack_lists
+        self.unpack_dicts  = unpack_dicts
 
         self.static_variables['fore']          = TextColor
         self.static_variables['bg']            = BGColor
@@ -318,9 +326,9 @@ class ColoredFormatter(PlainFormatter):
 
         elif isinstance(value, list):
             list_color = self.get_value_color(list)
-            output = f'{list_color}['
+            output = '' if self.unpack_lists else f'{list_color}['
             temp = [self.format_value(v) for v in value]
-            output += f'{list_color}, '.join(temp) + f'{list_color}]{TextStyle.reset}'
+            output += f'{list_color}, '.join(temp) + '' if self.unpack_lists else f'{list_color}]{TextStyle.reset}'
 
             return output
 
@@ -334,6 +342,10 @@ class ColoredFormatter(PlainFormatter):
 
         elif isinstance(value, dict):
             dict_color = self.get_value_color(dict)
+
+            if self.unpack_dicts:
+                return f'{dict_color}, '.join([f'{self.format_value(k)} {dict_color}=> {self.format_value(v)}{TextStyle.reset}' for k, v in value.items()])
+
             output = f'{dict_color}{{'
             temp = [f'{self.format_value(k)}{dict_color}: {self.format_value(v)}' for k, v in value.items()]
             output += f'{dict_color}, '.join(temp) + f'{dict_color}}}{TextStyle.reset}'

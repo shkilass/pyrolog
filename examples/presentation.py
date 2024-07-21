@@ -284,4 +284,24 @@ trace_logger.trace('But after update of the global color dict, {} has own color'
 
 ####
 
+# unpack dictionaries
+
+unpack_dicts_logger = pyrolog.Logger(
+    name='UnpackDictsLogger',
+    handlers=[
+        pyrolog.StdoutHandler(
+            log_level='info',
+            formatter=pyrolog.ColoredFormatter(
+                format_string=pyrolog.defaults.COLORED_MAXIMUM_FORMAT_STRING,
+                color_dict=custom_color_dict,
+                unpack_dicts=True,
+            ),
+        )
+    ]
+)
+
+unpack_dicts_logger.info('Items: {}', {1: 'one', 2: 'two', 3: 'three'})
+
+####
+
 main_logger.info('🔥 {style.bold}Pyrolog{reset} - Best pretty logging library')
